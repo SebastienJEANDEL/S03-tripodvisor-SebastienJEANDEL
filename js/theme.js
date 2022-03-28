@@ -20,13 +20,13 @@ const theme = {
         switchBtnElmt.addEventListener("click", theme.changeTheme);
 
         // on check si il existe une entrée dans le dark mode on l'applique
-        theme.applyLocalStorageTheme();
+        theme.applyLocalStorageTheme(theme.themeFavorite);
     },
-    currentTheme: 'theme-green',
+    themeFavorite: 'theme-green',
     
     handleThemeColorClick: function(e){
-        currentTheme = e.target.id;
-        theme.changeColorTheme();
+        themeFavorite = e.currentTarget.id;
+        theme.changeColorTheme(themeFavorite);
     },
     changeTheme: function () {
         // fonction qui permet de mettre le thème en mode dark si il n'y est pas et de l'enlever si il y est.
@@ -87,19 +87,50 @@ const theme = {
             theme.changeTheme();
         }
     },
-    changeColorTheme: function(){
+    changeColorTheme: function(themeFavorite){
          //repérage de l'élément à modifier la class
          let body = document.querySelector('body');
          //je regarde si body a déjà une classe auquelcas je lui retire
          let listeClassBody = body.classList;
-         console.log(listeClassBody);
+         console.log(listeClassBody,"avant le test");
  
          if (listeClassBody!== null){
-             body.classList.remove(theme.currentTheme);
+             body.classList.add("memere");
              }
+         console.log(themeFavorite, "après le test");
          
-         
-         body.classList.add(currentTheme);
+         body.classList.add(themeFavorite);
+
+         theme.setColorThemeToLocalStorage(themeFavorite);
  
+    },
+    applyLocalColorTheme: function () {
+        // on regarde si il existe une entrée appelée dark_theme dans le local storage
+        const StringifyIsColored = localStorage.getItem("favorite_theme");
+
+        console.log(typeof StringifyIsColored);
+        //  => STRING
+
+        // on va retransformer notre JSON en JS
+        const isColored = JSON.parse(StringifyIsColored);
+
+        console.log(typeof isColored);
+        //  => BOOLEAN
+
+        if (isColored) {
+            console.log("vrai c'est vrai !");
+            theme.changeColorTheme();
+        }
+    },
+    setColorThemeToLocalStorage: function (themeFavorite) {
+        console.log("je suis la pour remplir le localStorage");
+        //  notre darkTheme est un booléen, on veut le stocker en booleen
+        // MAIS localstorage n'accepte que des string
+        //  donc on va transformer notre booléen en JSON (comme JSON est assimilé string on pourra stocker le JSON dans localstorage)
+        const stringifythemeFavorite = JSON.stringify(themeFavorite);
+        console.log(stringifythemeFavorite);
+
+        // ajoute une entrée dans local storage
+        localStorage.setItem("favorite_theme", stringifythemeFavorite);
     },
 };
