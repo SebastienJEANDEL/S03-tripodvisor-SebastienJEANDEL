@@ -6,6 +6,14 @@ const theme = {
 
         // on va chercher le bouton qui a l'id theme-switch
         const switchBtnElmt = document.querySelector("#theme-switch");
+        //on va chercher les éléments vert rouge et bleus pour leur poser des écouteurs
+        const colorType = document.querySelectorAll('.theme-button');
+       
+        //on boucle pour poser un ecouteur a chaque entree
+        for (i=0; i<colorType.length;i++){
+                let currentColorType = colorType[i]
+                currentColorType.addEventListener('click',theme.handleThemeColorClick);
+                }
 
         // on lui pose un eventListner dessus
         // le handler (la méthode appelée au click) est une des méthodes de notre module, il faut donc prefixer son nom de theme. (équivalent de theme['changeTheme'] => nottation pas très utilisée pour les appels de méthode ..)
@@ -13,6 +21,12 @@ const theme = {
 
         // on check si il existe une entrée dans le dark mode on l'applique
         theme.applyLocalStorageTheme();
+    },
+    currentTheme: 'theme-green',
+    
+    handleThemeColorClick: function(e){
+        currentTheme = e.target.id;
+        theme.changeColorTheme();
     },
     changeTheme: function () {
         // fonction qui permet de mettre le thème en mode dark si il n'y est pas et de l'enlever si il y est.
@@ -72,5 +86,20 @@ const theme = {
             console.log("vrai c'est vrai !");
             theme.changeTheme();
         }
+    },
+    changeColorTheme: function(){
+         //repérage de l'élément à modifier la class
+         let body = document.querySelector('body');
+         //je regarde si body a déjà une classe auquelcas je lui retire
+         let listeClassBody = body.classList;
+         console.log(listeClassBody);
+ 
+         if (listeClassBody!== null){
+             body.classList.remove(theme.currentTheme);
+             }
+         
+         
+         body.classList.add(currentTheme);
+ 
     },
 };
